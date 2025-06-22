@@ -8,7 +8,7 @@
           <div class="item">
             <div class="meta"></div>
             <div class="content">
-              <div id="gauge-pollen-count" style="width:120px;height:120px;margin:0 auto;"></div>
+              <div id="{{ pollen_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
               <span class="label label--small">Pollen Count</span>
             </div>
           </div>
@@ -24,7 +24,7 @@
           <div class="item">
             <div class="meta"></div>
             <div class="content">
-              <div id="gauge-aqi" style="width:120px;height:120px;margin:0 auto;"></div>
+              <div id="{{ aqi_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
               <span class="label label--small">Air Quality Index ({{ features.first.properties.Category }})</span>
             </div>
           </div>
@@ -58,7 +58,7 @@
     </div>
   </div>
   <div class="title_bar">
-    <img class="image" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
+    <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
     <span class="title">Nashville Pollen &amp; Air Quality</span>
     <span class="instance">data.nashville.gov</span>
   </div>

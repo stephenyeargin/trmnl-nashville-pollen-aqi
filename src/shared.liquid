@@ -1,3 +1,6 @@
+{% assign pollen_chart_id = "pollen-gauge-" | append_random %}
+{% assign aqi_chart_id = "aqi-gauge-" | append_random %}
+
 <script src="https://usetrmnl.com/js/1.1.0/plugins.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
@@ -21,24 +24,29 @@ document.addEventListener('DOMContentLoaded', function () {
       chart: {
         type: "gauge",
         height: 140,
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
+        animation: false
       },
       title: null,
       pane: {
         startAngle: -150,
         endAngle: 150,
-        background: [{ backgroundColor: "transparent", borderWidth: 0 }]
+        background: {
+          backgroundColor: "transparent",
+          borderWidth: 0
+        }
       },
       yAxis: {
         min: 0,
         max: max,
-        endOnTick: false,
-        tickPositions: [0, max],
-        tickAmount: 0, // Hide ticks
+        minorTickInterval: 0,
+        tickColor: "#ffffff",
+        tickLength: 40,
+        tickPixelInterval: 40,
         tickWidth: 0,
         lineWidth: 0,
         labels: {
-          enabled: false // Hide axis labels
+          enabled: false
         },
         title: {
           text: null
@@ -72,8 +80,16 @@ document.addEventListener('DOMContentLoaded', function () {
       plotOptions: {
         gauge: {
           animation: false,
-          dial: { backgroundColor: "transparent", baseWidth: 0 },
-          pivot: { backgroundColor: "transparent" }
+          dial: {
+            backgroundColor: "transparent",
+            baseWidth: 0
+          },
+          pivot: {
+            backgroundColor: "transparent"
+          }
+        },
+        series: {
+          animation: false
         }
       },
       series: [{
@@ -81,9 +97,11 @@ document.addEventListener('DOMContentLoaded', function () {
         data: [value],
         dataLabels: {
           borderWidth: 0,
-          useHTML: true,
-          style: { fontSize: "2.8em", fontWeight: "600", color: "#000" },
-          format: '<span style="font-size:0.5em;font-weight:600;color:#000">{y}</span>'
+          style: {
+            fontSize: "1.8em",
+            fontWeight: "600",
+            color: "#000000"
+          }
         }
       }],
       credits: { enabled: false }
@@ -97,13 +115,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Render gauges
     renderGauge(
-      "gauge-pollen-count",
+      "{{ pollen_chart_id }}",
       Number(todaysMetrics.properties?.PollenCount) || 0,
       12, // Pollen max is 12
       "Pollen"
     );
     renderGauge(
-      "gauge-aqi",
+      "{{ aqi_chart_id }}",
       Number(todaysMetrics.properties?.AQI) || 0,
       500, // AQI max is 500
       "AQI"
