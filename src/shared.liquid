@@ -1,33 +1,21 @@
 {% assign pollen_chart_id = "pollen-gauge-" | append_random %}
 {% assign aqi_chart_id = "aqi-gauge-" | append_random %}
 
-<script src="https://usetrmnl.com/js/1.1.0/plugins.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/pattern-fill.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  function renderGauge(container, value, max, label) {
-    // Destroy previous chart if it exists
-    if (Highcharts.charts) {
-      Highcharts.charts.forEach(chart => {
-        if (chart && chart.renderTo && chart.renderTo.id === container) {
-          chart.destroy();
-        }
-      });
-    }
-    Highcharts.chart(container, {
-      accessibility: {
-        enabled: false, // not necessary for TRMNL
-      },
+  function createGauge(containerId, value, maxValue, label) {
+    Highcharts.chart(containerId, {
       chart: {
         type: "gauge",
         height: 140,
-        backgroundColor: "transparent",
         animation: false
       },
-      title: null,
+      title: {
+        text: null
+      },
       pane: {
         startAngle: -150,
         endAngle: 150,
@@ -36,20 +24,32 @@ document.addEventListener('DOMContentLoaded', function () {
           borderWidth: 0
         }
       },
+      plotOptions: {
+        gauge: {
+          animation: false,
+          pivot: {
+            backgroundColor: "transparent"
+          },
+          dial: {
+            backgroundColor: "transparent",
+            baseWidth: 0,
+          },
+        }
+      },
       yAxis: {
         min: 0,
-        max: max,
+        max: maxValue,
         minorTickInterval: 0,
         tickColor: "#ffffff",
         tickLength: 40,
         tickPixelInterval: 40,
         tickWidth: 0,
         lineWidth: 0,
-        labels: {
-          enabled: false
-        },
         title: {
           text: null
+        },
+        labels: {
+          enabled: false
         },
         plotBands: [{
           from: 0,
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
           borderRadius: "50%"
         }, {
           from: value,
-          to: max,
+          to: maxValue,
           color: {
             pattern: {
               image: "https://usetrmnl.com/images/grayscale/gray-5.png",
@@ -74,23 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           },
           innerRadius: "82%",
-          borderRadius: "50%"
+          borderRadius: "50%",
         }]
-      },
-      plotOptions: {
-        gauge: {
-          animation: false,
-          dial: {
-            backgroundColor: "transparent",
-            baseWidth: 0
-          },
-          pivot: {
-            backgroundColor: "transparent"
-          }
-        },
-        series: {
-          animation: false
-        }
       },
       series: [{
         name: label,
@@ -104,39 +89,38 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }
       }],
-      credits: { enabled: false }
+      credits: {
+        enabled: false
+      }
     });
   }
 
-  const renderTopMetrics = (pollen) => {
-    if (!pollen) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    const data = {
+      features: {{ features | json }}
+    };
 
-    const todaysMetrics = pollen[0];
+    // Sort by ReportDateTime in descending order
+    data.features.sort((a, b) => new Date(b.properties.ReportDateTime) - new Date(a.properties.ReportDateTime));
 
-    // Render gauges
-    renderGauge(
-      "{{ pollen_chart_id }}",
-      Number(todaysMetrics.properties?.PollenCount) || 0,
-      12, // Pollen max is 12
-      "Pollen"
-    );
-    renderGauge(
-      "{{ aqi_chart_id }}",
-      Number(todaysMetrics.properties?.AQI) || 0,
-      500, // AQI max is 500
-      "AQI"
-    );
-  };
+    if (data.features && data.features.length > 0) {
+      const todaysMetrics = data.features[0];
 
-  const data = {
-    features: {{ features | json }}
-  };
+      // Create gauges
+      createGauge(
+        "{{ pollen_chart_id }}",
+        Number(todaysMetrics.properties?.PollenCount) || 0,
+        12,
+        "Pollen"
+      );
+      createGauge(
+        "{{ aqi_chart_id }}",
+        Number(todaysMetrics.properties?.AQI) || 0,
+        500,
+        "AQI"
+      );
+    }
 
-  // Sort by ReportDateTime in descending order
-  data.features.sort((a, b) => new Date(b.properties.ReportDateTime) - new Date(a.properties.ReportDateTime));
-
-  window.pollen = data.features;
-  renderTopMetrics(data.features);
-});
-
+    window.pollen = data.features;
+  });
 </script>
