@@ -95,32 +95,32 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    const data = {
-      features: {{ features | json }}
-    };
+const loadGauges = () => {
+  const data = {
+    features: {{ features | json }}
+  };
 
-    // Sort by ReportDateTime in descending order
-    data.features.sort((a, b) => new Date(b.properties.ReportDateTime) - new Date(a.properties.ReportDateTime));
+  // Sort by ReportDateTime in descending order
+  data.features.sort((a, b) => new Date(b.properties.ReportDateTime) - new Date(a.properties.ReportDateTime));
 
-    if (data.features && data.features.length > 0) {
-      const todaysMetrics = data.features[0];
+  if (data.features && data.features.length > 0) {
+    const todaysMetrics = data.features[0];
 
-      // Create gauges
-      createGauge(
-        "{{ pollen_chart_id }}",
-        Number(todaysMetrics.properties?.PollenCount) || 0,
-        12,
-        "Pollen"
-      );
-      createGauge(
-        "{{ aqi_chart_id }}",
-        Number(todaysMetrics.properties?.AQI) || 0,
-        500,
-        "AQI"
-      );
-    }
+    // Create gauges
+    createGauge(
+      "{{ pollen_chart_id }}",
+      Number(todaysMetrics.properties?.PollenCount) || 0,
+      12,
+      "Pollen"
+    );
+    createGauge(
+      "{{ aqi_chart_id }}",
+      Number(todaysMetrics.properties?.AQI) || 0,
+      500,
+      "AQI"
+    );
+  }
 
-    window.pollen = data.features;
-  });
+  window.pollen = data.features;
+};
 </script>

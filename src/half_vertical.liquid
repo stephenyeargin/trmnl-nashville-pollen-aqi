@@ -23,7 +23,7 @@
         <div class="item mb--4">
           <div class="meta"></div>
           <div class="content">
-            <span class="value value--medium py--4" data-value-fit="true">{{ features.first.properties.PollenType }}</span>
+            <span class="value value--medium py--4" data-value-fit="true">{{ features.first.properties.PollenType }}, {{ features.first.properties.PollenDescription }}</span>
             <span class="label label--small">Pollen Type</span>
           </div>
         </div>
@@ -61,3 +61,5 @@
     <span class="title">Pollen &amp; Air Quality for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
   </div>
 </div>
+
+<script>loadGauges();</script>
