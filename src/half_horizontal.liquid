@@ -1,42 +1,38 @@
-<div class="view">
-  <div class="layout layout--top">
-    <div class="stretch-y">
-
-      <div class="flex pb--4" style="flex-direction: column; align-items: center;">
-        <div class="flex" style="width: 100%; justify-content: center;">
-          <div class="item">
-            <div class="meta"></div>
-            <div class="content">
-              <div id="{{ pollen_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
-              <span class="label label--small">Pollen Count</span>
-            </div>
+<div class="layout">
+  <div class="stretch-x">
+    <div class="flex style="flex-direction: column; align-items: center;">
+      <div class="flex" style="width: 100%; justify-content: center;">
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <div id="{{ pollen_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
+            <span class="label label--small">Pollen Count</span>
           </div>
+        </div>
 
-          <div class="item">
-            <div class="meta"></div>
-            <div class="content">
-              <span class="value value--medium py--4" data-value-fit="true">{{ features.first.properties.PollenType }}, {{ features.first.properties.PollenDescription }}</span>
-              <span class="label label--small">Pollen Type</span>
-            </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--medium py--4" data-value-fit="true">{{ features.first.properties.PollenType }}, {{ features.first.properties.PollenDescription }}</span>
+            <span class="label label--small">Pollen Type</span>
           </div>
+        </div>
 
-          <div class="item">
-            <div class="meta"></div>
-            <div class="content">
-              <div id="{{ aqi_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
-              <span class="label label--small">Air Quality Index ({{ features.first.properties.Category }})</span>
-            </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <div id="{{ aqi_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
+            <span class="label label--small">Air Quality Index ({{ features.first.properties.Category }})</span>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="title_bar">
-    <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
-    <span class="title">Nashville Pollen &amp; Air Quality for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
-    <span class="instance">data.nashville.gov</span>
-  </div>
+<div class="title_bar">
+  <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
+  <span class="title">Nashville Pollen &amp; Air Quality for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
 </div>
 
 <script>loadGauges();</script>

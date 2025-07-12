@@ -1,65 +1,64 @@
-<div class="view">
-  <div class="layout layout--top">
-    <div class="w--full">
-      <div>
-        <div class="flex">
-          <div class="item mb--4">
-            <div class="meta"></div>
-            <div class="content">
-              <div id="{{ pollen_chart_id }}" style="width:130px;height:130px;margin:0 auto;"></div>
-              <span class="label label--small">Pollen Count</span>
-            </div>
-          </div>
-
-          <div class="item mb--4">
-            <div class="meta"></div>
-            <div class="content">
-              <div id="{{ aqi_chart_id }}" style="width:130px;height:130px;margin:0 auto;"></div>
-              <span class="label label--small">AQI ({{ features.first.properties.Category }})</span>
-            </div>
+<div class="layout layout--top">
+  <div class="w--full">
+    <div>
+      <div class="flex">
+        <div class="item mb--4">
+          <div class="meta"></div>
+          <div class="content">
+            <div id="{{ pollen_chart_id }}" style="width:130px;height:130px;margin:0 auto;"></div>
+            <span class="label label--small">Pollen Count</span>
           </div>
         </div>
 
         <div class="item mb--4">
           <div class="meta"></div>
           <div class="content">
-            <span class="value value--medium py--4" data-value-fit="true">{{ features.first.properties.PollenType }}, {{ features.first.properties.PollenDescription }}</span>
-            <span class="label label--small">Pollen Type</span>
+            <div id="{{ aqi_chart_id }}" style="width:130px;height:130px;margin:0 auto;"></div>
+            <span class="label label--small">AQI ({{ features.first.properties.Category }})</span>
           </div>
         </div>
-
-
-        <table class="table table--condensed" id="pollen-table">
-        <thead>
-          <tr>
-            <th><span class="label label--small">Date</span></th>
-            <th><span class="label label--small text--center">Count</span></th>
-            <th><span class="label label--small">Type</span></th>
-            <th><span class="label label--small text--center">AQI</span></th>
-            <th><span class="label label--small">&nbsp;</span></th>
-          </tr>
-        </thead>
-        <tbody id="pollen-tbody">
-          {% for row in features limit: 4, offset: 1 %}
-          <tr>
-            <td><span class="label label--small">{{ row.properties.ReportDateTime | divided_by: 1000 | date: '%-m/%-d/%Y' }}</span></td>
-            <td class="text--center"><span class="value value--xxsmall value--tnums" data-value-format="true">{{ row.properties.PollenCount }}</span></td>
-            <td><span class="label label--small">{{ row.properties.PollenType }}, {{ row.properties.PollenDescription }}</span></td>
-            <td class="text--center"><span class="value value--xxsmall value--tnums" data-value-format="true">{{ row.properties.AQI }}</span></td>
-            <td><span class="label label--small">{{ row.properties.Category }}</span></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
       </div>
+
+      <div class="item mb--4">
+        <div class="meta"></div>
+        <div class="content">
+          <span class="value value--medium py--4" data-value-fit="true">{{ features.first.properties.PollenType }}, {{ features.first.properties.PollenDescription }}</span>
+          <span class="label label--small">Pollen Type</span>
+        </div>
+      </div>
+
+
+      <table class="table table--condensed" id="pollen-table">
+      <thead>
+        <tr>
+          <th><span class="label label--small">Date</span></th>
+          <th><span class="label label--small text--center">Count</span></th>
+          <th><span class="label label--small">Type</span></th>
+          <th><span class="label label--small text--center">AQI</span></th>
+          <th><span class="label label--small">&nbsp;</span></th>
+        </tr>
+      </thead>
+      <tbody id="pollen-tbody">
+        {% for row in features limit: 4, offset: 1 %}
+        <tr>
+          <td><span class="label label--small">{{ row.properties.ReportDateTime | divided_by: 1000 | date: '%-m/%-d/%Y' }}</span></td>
+          <td class="text--center"><span class="value value--xxsmall value--tnums" data-value-format="true">{{ row.properties.PollenCount }}</span></td>
+          <td><span class="label label--small">{{ row.properties.PollenType }}, {{ row.properties.PollenDescription }}</span></td>
+          <td class="text--center"><span class="value value--xxsmall value--tnums" data-value-format="true">{{ row.properties.AQI }}</span></td>
+          <td><span class="label label--small">{{ row.properties.Category }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
     </div>
-
   </div>
 
-  <div class="title_bar">
-    <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
-    <span class="title">Pollen &amp; Air Quality for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
-  </div>
 </div>
+
+<div class="title_bar">
+  <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
+  <span class="title">Pollen &amp; Air Quality for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
+</div>
+
 
 <script>loadGauges();</script>
