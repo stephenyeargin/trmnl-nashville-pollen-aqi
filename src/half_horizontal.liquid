@@ -32,7 +32,8 @@
 
 <div class="title_bar">
   <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
-  <span class="title">Nashville Pollen &amp; Air Quality for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
+  <span class="title">Report for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
+  <span class="instance">{{ trmnl.plugin_settings.instance_name  }}</span>
 </div>
 
 <script>loadGauges();</script>

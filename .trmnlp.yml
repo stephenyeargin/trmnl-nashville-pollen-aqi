@@ -11,4 +11,8 @@ custom_fields: {}
 
 # override variables
 variables:
-  trmnl: {}
+  trmnl: {
+    plugin_settings: {
+      instance_name: "Nashville Pollen & Air Quality"
+    }
+  }
