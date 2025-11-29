@@ -13,7 +13,7 @@
         <div class="item">
           <div class="meta"></div>
           <div class="content">
-            <span class="value value--medium py--4" data-value-fit="true">{{ features.first.properties.PollenType }}, {{ features.first.properties.PollenDescription }}</span>
+            <span class="value value--medium py--4" data-value-fit="true">{% render 'format_pollen_label', properties: features.first.properties %}</span>
             <span class="label label--small">Pollen Type</span>
           </div>
         </div>

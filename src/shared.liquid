@@ -124,3 +124,11 @@ const loadGauges = () => {
   window.pollen = data.features;
 };
 </script>
+
+{% template format_pollen_label %}
+{% if properties.PollenCount > 0 %}
+{{ properties.PollenType }}, {{ properties.PollenDescription }}
+{% else %}
+No pollen to report!
+{% endif %}
+{% endtemplate %}
