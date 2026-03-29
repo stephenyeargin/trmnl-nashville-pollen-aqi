@@ -1,30 +1,26 @@
-<div class="layout">
-  <div class="stretch-x">
-    <div class="flex style="flex-direction: column; align-items: center;">
-      <div class="flex" style="width: 100%; justify-content: center;">
-        <div class="item">
-          <div class="meta"></div>
-          <div class="content">
-            <div id="{{ pollen_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
-            <span class="label label--small">Pollen Count</span>
-          </div>
-        </div>
+<div class="layout layout--row">
+  <div class="grid grid--cols-3 w--full">
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <div id="{{ pollen_chart_id }}" class="w--36 h--36 lg:w--72 lg:h--72"></div>
+        <span class="label label--small lg:label--base">Pollen Count</span>
+      </div>
+    </div>
 
-        <div class="item">
-          <div class="meta"></div>
-          <div class="content">
-            <span class="value value--medium py--4" data-value-fit="true">{% render 'format_pollen_label', properties: features.first.properties %}</span>
-            <span class="label label--small">Pollen Type</span>
-          </div>
-        </div>
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <span class="value value--base lg:value--large py--4 lg:py--8" data-value-fit="true">{% render 'format_pollen_label', properties: features.first.properties %}</span>
+        <span class="label label--small lg:label--base">Pollen Type</span>
+      </div>
+    </div>
 
-        <div class="item">
-          <div class="meta"></div>
-          <div class="content">
-            <div id="{{ aqi_chart_id }}" style="width:135px;height:135px;margin:0 auto;"></div>
-            <span class="label label--small">Air Quality Index ({{ features.first.properties.Category }})</span>
-          </div>
-        </div>
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <div id="{{ aqi_chart_id }}" class="w--36 h--36 lg:w--72 lg:h--72">></div>
+        <span class="label label--small lg:label--base">Air Quality Index ({{ features.first.properties.Category }})</span>
       </div>
     </div>
   </div>

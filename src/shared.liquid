@@ -1,16 +1,16 @@
 {% assign pollen_chart_id = "pollen-gauge-" | append_random %}
 {% assign aqi_chart_id = "aqi-gauge-" | append_random %}
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/highcharts-more.js"></script>
-<script src="https://code.highcharts.com/modules/pattern-fill.js"></script>
+<script src="https://trmnl.com/js/highcharts/12.3.0/highcharts.js"></script>
+<script src="https://trmnl.com/js/chartkick/5.0.1/chartkick.min.js"></script>
+<script src="https://trmnl.com/js/highcharts/12.3.0/highcharts-more.js"></script>
+<script src="https://trmnl.com/js/highcharts/12.3.0/pattern-fill.js"></script>
 
 <script>
   function createGauge(containerId, value, maxValue, label) {
     Highcharts.chart(containerId, {
       chart: {
         type: "gauge",
-        height: 140,
         animation: false
       },
       title: {
@@ -56,7 +56,7 @@
           to: value,
           color: {
             pattern: {
-              image: "https://usetrmnl.com/images/grayscale/gray-2.png",
+              image: "https://trmnl.com/images/grayscale/gray-2.png",
               width: 12,
               height: 12
             }
@@ -68,7 +68,7 @@
           to: maxValue,
           color: {
             pattern: {
-              image: "https://usetrmnl.com/images/grayscale/gray-5.png",
+              image: "https://trmnl.com/images/grayscale/gray-5.png",
               width: 12,
               height: 12
             }
