@@ -3,7 +3,7 @@
     <div class="item">
       <div class="meta"></div>
       <div class="content">
-        <div id="{{ pollen_chart_id }}" class="w--36 h--36 lg:w--72 lg:h--72"></div>
+        <div id="{{ pollen_chart_id }}" class="w--36 h--36 lg:w--72 lg:h--72">Loading ...</div>
         <span class="label label--small lg:label--base">Pollen Count</span>
       </div>
     </div>
@@ -19,7 +19,7 @@
     <div class="item">
       <div class="meta"></div>
       <div class="content">
-        <div id="{{ aqi_chart_id }}" class="w--36 h--36 lg:w--72 lg:h--72">></div>
+        <div id="{{ aqi_chart_id }}" class="w--36 h--36 lg:w--72 lg:h--72">Loading ...</div>
         <span class="label label--small lg:label--base">Air Quality Index ({{ features.first.properties.Category }})</span>
       </div>
     </div>
@@ -32,4 +32,8 @@
   <span class="instance">{{ trmnl.plugin_settings.instance_name  }}</span>
 </div>
 
-<script>loadGauges();</script>
+<script>
+  if (typeof window["{{ load_gauges_fn }}"] === "function") {
+    window["{{ load_gauges_fn }}"]();
+  }
+</script>

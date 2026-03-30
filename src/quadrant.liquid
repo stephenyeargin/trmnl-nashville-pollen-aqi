@@ -3,7 +3,7 @@
     <div class="item">
       <div class="meta"></div>
       <div class="content">
-        <div id="{{ pollen_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56"></div>
+        <div id="{{ pollen_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56">Loading ...</div>
         <span class="label label--small lg:label--base">Pollen Count</span>
       </div>
     </div>
@@ -11,7 +11,7 @@
     <div class="item">
       <div class="meta"></div>
       <div class="content">
-        <div id="{{ aqi_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56">></div>
+        <div id="{{ aqi_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56">Loading ...</div>
         <span class="label label--small lg:label--base">AQI ({{ features.first.properties.Category }})</span>
       </div>
     </div>
@@ -24,4 +24,8 @@
 </div>
 
 
-<script>loadGauges();</script>
+<script>
+  if (typeof window["{{ load_gauges_fn }}"] === "function") {
+    window["{{ load_gauges_fn }}"]();
+  }
+</script>

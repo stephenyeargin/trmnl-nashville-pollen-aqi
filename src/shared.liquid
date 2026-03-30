@@ -1,12 +1,52 @@
 {% assign pollen_chart_id = "pollen-gauge-" | append_random %}
 {% assign aqi_chart_id = "aqi-gauge-" | append_random %}
-
-<script src="https://trmnl.com/js/highcharts/12.3.0/highcharts.js"></script>
-<script src="https://trmnl.com/js/chartkick/5.0.1/chartkick.min.js"></script>
-<script src="https://trmnl.com/js/highcharts/12.3.0/highcharts-more.js"></script>
-<script src="https://trmnl.com/js/highcharts/12.3.0/pattern-fill.js"></script>
+{% assign load_gauges_fn = "loadGauges_" | append_random %}
 
 <script>
+  (() => {
+  const ensureScript = (src) => {
+    if (!window.__trmnlScriptLoads) {
+      window.__trmnlScriptLoads = {};
+    }
+
+    if (window.__trmnlScriptLoads[src]) {
+      return window.__trmnlScriptLoads[src];
+    }
+
+    window.__trmnlScriptLoads[src] = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[src="' + src + '"]');
+      if (existing) {
+        if (existing.dataset.loaded === "true") {
+          resolve();
+          return;
+        }
+        // If the script already exists, assume it has either loaded or is managed by host dedupe logic.
+        resolve();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = false;
+      script.onload = () => {
+        script.dataset.loaded = "true";
+        resolve();
+      };
+      script.onerror = () => reject(new Error("Failed to load " + src));
+      document.head.appendChild(script);
+    });
+
+    return window.__trmnlScriptLoads[src];
+  };
+
+  const ensureHighcharts = async () => {
+    if (!window.Highcharts) {
+      await ensureScript("https://trmnl.com/js/highcharts/12.3.0/highcharts.js");
+    }
+    await ensureScript("https://trmnl.com/js/highcharts/12.3.0/highcharts-more.js");
+    await ensureScript("https://trmnl.com/js/highcharts/12.3.0/pattern-fill.js");
+  };
+
   function createGauge(containerId, value, maxValue, label) {
     Highcharts.chart(containerId, {
       chart: {
@@ -15,6 +55,9 @@
       },
       title: {
         text: null
+      },
+      accessibility: {
+        enabled: false
       },
       pane: {
         startAngle: -150,
@@ -95,34 +138,37 @@
     });
   }
 
-const loadGauges = () => {
-  const data = {
-    features: {{ features | json }}
+  window["{{ load_gauges_fn }}"] = async () => {
+    await ensureHighcharts();
+
+    const data = {
+      features: {{ features | json }}
+    };
+
+    // Sort by ReportDateTime in descending order
+    data.features.sort((a, b) => new Date(b.properties.ReportDateTime) - new Date(a.properties.ReportDateTime));
+
+    if (data.features && data.features.length > 0) {
+      const todaysMetrics = data.features[0];
+
+      // Create gauges
+      createGauge(
+        "{{ pollen_chart_id }}",
+        Number(todaysMetrics.properties?.PollenCount) || 0,
+        12,
+        "Pollen"
+      );
+      createGauge(
+        "{{ aqi_chart_id }}",
+        Number(todaysMetrics.properties?.AQI) || 0,
+        500,
+        "AQI"
+      );
+    }
+
+    window.pollen = data.features;
   };
-
-  // Sort by ReportDateTime in descending order
-  data.features.sort((a, b) => new Date(b.properties.ReportDateTime) - new Date(a.properties.ReportDateTime));
-
-  if (data.features && data.features.length > 0) {
-    const todaysMetrics = data.features[0];
-
-    // Create gauges
-    createGauge(
-      "{{ pollen_chart_id }}",
-      Number(todaysMetrics.properties?.PollenCount) || 0,
-      12,
-      "Pollen"
-    );
-    createGauge(
-      "{{ aqi_chart_id }}",
-      Number(todaysMetrics.properties?.AQI) || 0,
-      500,
-      "AQI"
-    );
-  }
-
-  window.pollen = data.features;
-};
+  })();
 </script>
 
 {% template format_pollen_label %}
