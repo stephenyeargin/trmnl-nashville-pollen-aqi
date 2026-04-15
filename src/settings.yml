@@ -14,6 +14,7 @@ custom_fields:
 - keyname: author_bio
   name: About This Plugin
   field_type: author_bio
+  category: environment
   description: Pollen and air quality report from the Metro Nashville Health Department.
   github_url: https://github.com/stephenyeargin/trmnl-nashville-pollen-aqi
   learn_more_url: https://www.nashville.gov/departments/health/environmental-health/air-pollution-control/daily-aqi-and-pollen-count
