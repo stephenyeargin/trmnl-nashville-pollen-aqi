@@ -6,7 +6,7 @@ static_data: ''
 polling_verb: get
 framework_version: 2.3.7
 serverless_language: 
-polling_url: https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Air_Quality_and_Pollen_Count_1/FeatureServer/0/query?outFields=*&where=1%3D1&orderByFields=ReportDateTime%20desc&f=geojson&resultRecordCount=10
+polling_url: https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Air_Quality_and_Pollen_Count_1/FeatureServer/0/query?outFields=*&where=1%3D1&orderByFields=ReportDateTime%20desc&f=geojson&resultRecordCount=15
 polling_headers: ''
 polling_body: ''
 id: 93912

@@ -1,33 +1,33 @@
-<div class="layout layout--col layout--top">
-  <div class="w--full">
-    <div>
-      <div class="flex lg:portrait:flex--col">
-        <div class="item mb--4">
-          <div class="meta"></div>
-          <div class="content">
-            <div id="{{ pollen_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56">Loading ...</div>
-            <span class="label label--small">Pollen Count</span>
-          </div>
-        </div>
-
-        <div class="item mb--4">
-          <div class="meta"></div>
-          <div class="content">
-            <div id="{{ aqi_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56">Loading ...</div>
-            <span class="label label--small">AQI ({{ features.first.properties.Category }})</span>
-          </div>
-        </div>
+<div class="layout layout--col layout--top layout--shrink-y">
+  <div class="flex w--full">
+    <div class="item mb--2">
+      <div class="meta"></div>
+      <div class="content">
+        <div id="{{ pollen_chart_id }}" class="w--28 h--28 lg:w--56 lg:h--56">Loading ...</div>
+        <span class="label label--small">Pollen Count</span>
       </div>
+    </div>
 
-      <div class="item mb--4">
-        <div class="meta"></div>
-        <div class="content">
-          <span class="value value--medium py--4" data-value-fit="true">{% render 'format_pollen_label', properties: features.first.properties %}</span>
-          <span class="label label--small">Pollen Type</span>
-        </div>
+    <div class="item mb--2">
+      <div class="meta"></div>
+      <div class="content">
+        <div id="{{ aqi_chart_id }}" class="w--28 h--28 lg:w--56 lg:h--56">Loading ...</div>
+        <span class="label label--small">AQI ({{ features.first.properties.Category }})</span>
       </div>
+    </div>
+  </div>
 
-      <table class="table table--condensed" data-table-limit="true">
+  <div class="item mb--2">
+    <div class="meta"></div>
+    <div class="content">
+      <span class="value value--xsmall py--2" data-value-fit="true">{% render 'format_pollen_label', properties: features.first.properties %}</span>
+      <span class="label label--small">Pollen Type</span>
+    </div>
+  </div>
+</div>
+<div class="layout layout--row layout--stretch-y">
+  <div class="h--full w--full">
+    <table class="table table--condensed" data-table-limit="true" table-overflow-counter="false">
       <thead>
         <tr>
           <th><span class="label label--small lg:label--base">Date</span></th>
@@ -49,9 +49,7 @@
         {% endfor %}
       </tbody>
     </table>
-    </div>
   </div>
-
 </div>
 
 <div class="title_bar">
