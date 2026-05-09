@@ -1,54 +1,14 @@
+{% assign today = features.first.properties %}
+{% assign pollen_count = today.PollenCount | plus: 0 %}
+{% assign aqi_value = today.AQI | plus: 0 %}
+
 <div class="layout layout--col gap--space-between">
-  <div class="grid grid--cols-3 w--full mb--5">
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <div id="{{ pollen_chart_id }}" class="w--48 h--48 lg:w--72 lg:h--72 lg:portrait:w--60">Loading ...</div>
-        <span class="label label--small lg:label--base">Pollen Count</span>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <span class="value value--base lg:value--large py--4 lg:py--8" data-value-fit="true">{% render 'format_pollen_label', properties: features.first.properties %}</span>
-        <span class="label label--small lg:label--base">Pollen Type</span>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <div id="{{ aqi_chart_id }}" class="w--48 h--48 lg:w--72 lg:h--72 lg:portrait:w--60">Loading ...</div>
-        <span class="label label--small lg:label--base">Air Quality Index ({{ features.first.properties.Category }})</span>
-      </div>
-    </div>
+  <div class="grid grid--cols-2 w--full mb--5">
+    {% render 'glance_card_pollen', pollen_count: pollen_count, today: today, large_label: true %}
+    {% render 'glance_card_aqi', aqi_value: aqi_value, today: today, large_label: true %}
   </div>
   <div class="w--full">
-    <table class="table table--condensed" data-table-limit="true" data-overflow-counter="false">
-      <thead>
-        <tr>
-          <th><span class="label label--base lg:label--large">Date</span></th>
-          <th><span class="label label--base lg:label--large text--center">Pollen Count</span></th>
-          <th><span class="label label--base lg:label--large">Type</span></th>
-          <th><span class="label label--base lg:label--large text--center">AQI</span></th>
-          <th><span class="label label--base lg:label--large">&nbsp;</span></th>
-          <th><span class="label label--base lg:label--large">Contributor</span></th>
-        </tr>
-      </thead>
-      <tbody id="pollen-tbody">
-        {% for row in features offset: 1 %}
-        <tr>
-          <td><span class="label label--small lg:label--base">{{ row.properties.ReportDateTime | divided_by: 1000 | date: '%-m/%-d/%Y' }}</span></td>
-          <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true">{{ row.properties.PollenCount }}</span></td>
-          <td><span class="label label--small lg:label--base">{% render 'format_pollen_label', properties: row.properties %}</span></td>
-          <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true">{{ row.properties.AQI }}</span></td>
-          <td><span class="label label--small lg:label--base">{{ row.properties.Category }}</span></td>
-          <td><span class="label label--small lg:label--base">{{ row.properties.ResponsiblePollutant }}</span></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    {% render 'historical_table', features: features, narrow: false %}
   </div>
 </div>
 
@@ -57,9 +17,3 @@
   <span class="title">Report for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
   <span class="instance">{{ trmnl.plugin_settings.instance_name  }}</span>
 </div>
-
-<script>
-  if (typeof window["{{ load_gauges_fn }}"] === "function") {
-    window["{{ load_gauges_fn }}"]();
-  }
-</script>

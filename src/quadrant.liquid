@@ -1,20 +1,11 @@
-<div class="layout layout--row">
-  <div class="grid grid--cols-2 lg:portrait:grid--cols-1 w--full">
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <div id="{{ pollen_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56">Loading ...</div>
-        <span class="label label--small lg:label--base">Pollen Count</span>
-      </div>
-    </div>
+{% assign today = features.first.properties %}
+{% assign pollen_count = today.PollenCount | plus: 0 %}
+{% assign aqi_value = today.AQI | plus: 0 %}
 
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <div id="{{ aqi_chart_id }}" class="w--36 h--36 lg:w--56 lg:h--56">Loading ...</div>
-        <span class="label label--small lg:label--base">AQI ({{ features.first.properties.Category }})</span>
-      </div>
-    </div>
+<div class="layout layout--col layout--top">
+  <div class="grid grid--cols-2 w--full">
+    {% render 'glance_card_pollen', pollen_count: pollen_count, today: today, compact: true %}
+    {% render 'glance_card_aqi', aqi_value: aqi_value, today: today, compact: true %}
   </div>
 </div>
 
@@ -22,10 +13,3 @@
   <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
   <span class="title">Report for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
 </div>
-
-
-<script>
-  if (typeof window["{{ load_gauges_fn }}"] === "function") {
-    window["{{ load_gauges_fn }}"]();
-  }
-</script>

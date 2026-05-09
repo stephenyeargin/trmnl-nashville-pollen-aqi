@@ -1,175 +1,58 @@
-{% assign pollen_chart_id = "pollen-gauge-" | append_random %}
-{% assign aqi_chart_id = "aqi-gauge-" | append_random %}
-{% assign load_gauges_fn = "loadGauges_" | append_random %}
+{% template glance_card_pollen %}
+{% assign pollen_segments_local = pollen_count | plus: 0 %}
+{% if pollen_segments_local > 12 %}
+{% assign pollen_segments_local = 12 %}
+{% endif %}
+<div class="item">
+  <div class="meta"></div>
+  <div class="content">
+    <span class="label label--small{% if large_label %} lg:label--base{% endif %}">Pollen Count</span>
+    <span class="value {% if compact %}value--large{% else %}value--large lg:value--xlarge{% endif %} py--1" data-value-format="true">{{ pollen_count }}</span>
+    <div class="progress-dots{% if compact %} progress-dots--xsmall{% endif %}" aria-hidden="true">
+      <div class="track">
+        {% for i in (1..12) %}
+        <div class="dot{% if pollen_segments_local > 0 and i < pollen_segments_local %} dot--filled{% elsif i == pollen_segments_local and pollen_segments_local > 0 %} dot--current{% endif %}"></div>
+        {% endfor %}
+      </div>
+    </div>
+    <span class="label label--small">{% render 'format_trigger_summary', properties: today %}</span>
+  </div>
+</div>
+{% endtemplate %}
 
-<script>
-  (() => {
-  const ensureScript = (src) => {
-    if (!window.__trmnlScriptLoads) {
-      window.__trmnlScriptLoads = {};
-    }
-
-    if (window.__trmnlScriptLoads[src]) {
-      return window.__trmnlScriptLoads[src];
-    }
-
-    window.__trmnlScriptLoads[src] = new Promise((resolve, reject) => {
-      const existing = document.querySelector('script[src="' + src + '"]');
-      if (existing) {
-        if (existing.dataset.loaded === "true") {
-          resolve();
-          return;
-        }
-        // If the script already exists, assume it has either loaded or is managed by host dedupe logic.
-        resolve();
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = src;
-      script.async = false;
-      script.onload = () => {
-        script.dataset.loaded = "true";
-        resolve();
-      };
-      script.onerror = () => reject(new Error("Failed to load " + src));
-      document.head.appendChild(script);
-    });
-
-    return window.__trmnlScriptLoads[src];
-  };
-
-  const ensureHighcharts = async () => {
-    if (!window.Highcharts) {
-      await ensureScript("https://trmnl.com/js/highcharts/12.3.0/highcharts.js");
-    }
-    await ensureScript("https://trmnl.com/js/highcharts/12.3.0/highcharts-more.js");
-    await ensureScript("https://trmnl.com/js/highcharts/12.3.0/pattern-fill.js");
-  };
-
-  function createGauge(containerId, value, maxValue, label) {
-    Highcharts.chart(containerId, {
-      chart: {
-        type: "gauge",
-        animation: false
-      },
-      title: {
-        text: null
-      },
-      accessibility: {
-        enabled: false
-      },
-      pane: {
-        startAngle: -150,
-        endAngle: 150,
-        background: {
-          backgroundColor: "transparent",
-          borderWidth: 0
-        }
-      },
-      plotOptions: {
-        gauge: {
-          animation: false,
-          pivot: {
-            backgroundColor: "transparent"
-          },
-          dial: {
-            backgroundColor: "transparent",
-            baseWidth: 0,
-          },
-        }
-      },
-      yAxis: {
-        min: 0,
-        max: maxValue,
-        minorTickInterval: 0,
-        tickColor: "#ffffff",
-        tickLength: 40,
-        tickPixelInterval: 40,
-        tickWidth: 0,
-        lineWidth: 0,
-        title: {
-          text: null
-        },
-        labels: {
-          enabled: false
-        },
-        plotBands: [{
-          from: 0,
-          to: value,
-          color: {
-            pattern: {
-              image: "https://trmnl.com/images/grayscale/gray-2.png",
-              width: 12,
-              height: 12
-            }
-          },
-          innerRadius: "82%",
-          borderRadius: "50%"
-        }, {
-          from: value,
-          to: maxValue,
-          color: {
-            pattern: {
-              image: "https://trmnl.com/images/grayscale/gray-5.png",
-              width: 12,
-              height: 12
-            }
-          },
-          innerRadius: "82%",
-          borderRadius: "50%",
-        }]
-      },
-      series: [{
-        name: label,
-        data: [value],
-        dataLabels: {
-          borderWidth: 0,
-          style: {
-            fontSize: "1.8em",
-            fontWeight: "600",
-            color: "#000000"
-          }
-        }
-      }],
-      credits: {
-        enabled: false
-      }
-    });
-  }
-
-  window["{{ load_gauges_fn }}"] = async () => {
-    await ensureHighcharts();
-
-    const data = {
-      features: {{ features | json }}
-    };
-
-    // Sort by ReportDateTime in descending order
-    data.features.sort((a, b) => new Date(b.properties.ReportDateTime) - new Date(a.properties.ReportDateTime));
-
-    if (data.features && data.features.length > 0) {
-      const todaysMetrics = data.features[0];
-
-      // Create gauges
-      createGauge(
-        "{{ pollen_chart_id }}",
-        Number(todaysMetrics.properties?.PollenCount) || 0,
-        12,
-        "Pollen"
-      );
-      createGauge(
-        "{{ aqi_chart_id }}",
-        Number(todaysMetrics.properties?.AQI) || 0,
-        500,
-        "AQI"
-      );
-    }
-
-    window.pollen = data.features;
-  };
-  })();
-</script>
+{% template glance_card_aqi %}
+{% assign aqi_band_local = 1 %}
+{% if aqi_value > 50 %}
+{% assign aqi_band_local = 2 %}
+{% endif %}
+{% if aqi_value > 100 %}
+{% assign aqi_band_local = 3 %}
+{% endif %}
+{% if aqi_value > 150 %}
+{% assign aqi_band_local = 4 %}
+{% endif %}
+{% if aqi_value > 200 %}
+{% assign aqi_band_local = 5 %}
+{% endif %}
+{% if aqi_value > 300 %}
+{% assign aqi_band_local = 6 %}
+{% endif %}
+<div class="item">
+  <div class="meta"></div>
+  <div class="content">
+    <span class="label label--small{% if large_label %} lg:label--base{% endif %}">Air Quality Index</span>
+    <span class="value {% if compact %}value--large{% else %}value--large lg:value--xlarge{% endif %} py--1" data-value-format="true">{{ aqi_value }}</span>
+    <div class="progress-dots{% if compact %} progress-dots--xsmall{% endif %} lg:progress-dots--base" aria-hidden="true">
+      <div class="track">
+        {% for i in (1..6) %}
+        <div class="dot{% if aqi_band_local > 0 and i < aqi_band_local %} dot--filled{% elsif i == aqi_band_local %} dot--current{% endif %}"></div>
+        {% endfor %}
+      </div>
+    </div>
+    <span class="label label--small">EPA band: {{ today.Category }} • {{ today.ResponsiblePollutant }}</span>
+  </div>
+</div>
+{% endtemplate %}
 
 {% template format_pollen_label %}
 {% if properties.PollenCount > 0 %}
@@ -177,4 +60,43 @@
 {% else %}
 No pollen to report!
 {% endif %}
+{% endtemplate %}
+
+{% template format_trigger_summary %}
+{% if properties.PollenCount > 0 %}
+{{ properties.PollenType }}, {{ properties.PollenDescription }}
+{% else %}
+No pollen to report
+{% endif %}
+{% endtemplate %}
+
+{% template historical_table %}
+<table class="table table--condensed" data-table-limit="true" table-overflow-counter="false">
+  <thead>
+    <tr>
+      <th><span class="label {% if narrow %}label--small lg:label--base{% else %}label--base lg:label--large{% endif %}">Date</span></th>
+      <th><span class="label {% if narrow %}label--small lg:label--base{% else %}label--base lg:label--large{% endif %} text--center">{% if narrow %}Count{% else %}Pollen Count{% endif %}</span></th>
+      <th><span class="label {% if narrow %}label--small lg:label--base{% else %}label--base lg:label--large{% endif %}">Type</span></th>
+      <th><span class="label {% if narrow %}label--small lg:label--base{% else %}label--base lg:label--large{% endif %} text--center">AQI</span></th>
+      <th><span class="label {% if narrow %}label--small lg:label--base{% else %}label--base lg:label--large{% endif %}">&nbsp;</span></th>
+      {% unless narrow %}
+      <th><span class="label label--base lg:label--large">Contributor</span></th>
+      {% endunless %}
+    </tr>
+  </thead>
+  <tbody id="pollen-tbody">
+    {% for row in features offset: 1 %}
+    <tr>
+      <td><span class="label {% if narrow %}label--small lg:label--base{% else %}label--small lg:label--base{% endif %}">{{ row.properties.ReportDateTime | divided_by: 1000 | date: '%-m/%-d/%Y' }}</span></td>
+      <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true">{{ row.properties.PollenCount }}</span></td>
+      <td><span class="label {% if narrow %}label--small lg:label--base{% else %}label--small lg:label--base{% endif %}">{% render 'format_pollen_label', properties: row.properties %}</span></td>
+      <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true">{{ row.properties.AQI }}</span></td>
+      <td><span class="label {% if narrow %}label--small lg:label--base{% else %}label--small lg:label--base{% endif %}">{{ row.properties.Category }}</span></td>
+      {% unless narrow %}
+      <td><span class="label label--small lg:label--base">{{ row.properties.ResponsiblePollutant }}</span></td>
+      {% endunless %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endtemplate %}
