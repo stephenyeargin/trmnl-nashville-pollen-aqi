@@ -1,6 +1,6 @@
 # Nashville Pollen & Air Quality
 
-[![Build and Deploy](https://github.com/stephenyeargin/trmnl-nashville-pollen-aqi/actions/workflows/build.yml/badge.svg)](https://github.com/stephenyeargin/trmnl-nashville-pollen-aqi/actions/workflows/build.yml)
+[![Build and Deploy](https://github.com/stephenyeargin/trmnl-nashville-pollen-aqi/actions/workflows/build.yml/badge.svg)](https://github.com/stephenyeargin/trmnl-nashville-pollen-aqi/actions/workflows/build.yml) [![TRMNL Recipe Connections](https://trmnl-badges.gohk.xyz/badge/connections?recipe=93912)](https://trmnl.com/recipes/93912)
 
 ![promo](assets/promo.png)
 
