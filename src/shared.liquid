@@ -1,3 +1,4 @@
+{% assign trmnl.user.locale = trmnl.user.locale | default: "en-US" %}
 {% template glance_card_pollen %}
 {% assign pollen_segments_local = pollen_count | plus: 0 %}
 {% if pollen_segments_local > 12 %}
@@ -7,7 +8,7 @@
   <div class="meta"></div>
   <div class="content">
     <span class="label label--small{% if large_label %} lg:label--base{% endif %}">Pollen Count</span>
-    <span class="value {% if compact %}value--large{% else %}value--large lg:value--xlarge{% endif %} py--1" data-value-format="true">{{ pollen_count }}</span>
+    <span class="value {% if compact %}value--large{% else %}value--large lg:value--xlarge{% endif %} py--1" data-value-format="true" data-value-locale="{{ trmnl.user.locale }}">{{ pollen_count }}</span>
     <div class="progress-dots{% if compact %} progress-dots--xsmall{% endif %}" aria-hidden="true">
       <div class="track">
         {% for i in (1..12) %}
@@ -41,7 +42,7 @@
   <div class="meta"></div>
   <div class="content">
     <span class="label label--small{% if large_label %} lg:label--base{% endif %}">Air Quality Index</span>
-    <span class="value {% if compact %}value--large{% else %}value--large lg:value--xlarge{% endif %} py--1" data-value-format="true">{{ aqi_value }}</span>
+    <span class="value {% if compact %}value--large{% else %}value--large lg:value--xlarge{% endif %} py--1" data-value-format="true" data-value-locale="{{ trmnl.user.locale }}">{{ aqi_value }}</span>
     <div class="progress-dots{% if compact %} progress-dots--xsmall{% endif %} lg:progress-dots--base" aria-hidden="true">
       <div class="track">
         {% for i in (1..6) %}
@@ -71,7 +72,7 @@ No pollen to report
 {% endtemplate %}
 
 {% template historical_table %}
-<table class="table table--condensed" data-table-limit="true" table-overflow-counter="false">
+<table class="table table--condensed" data-table-max-height="auto" data-table-limit="true" table-overflow-counter="false">
   <thead>
     <tr>
       <th><span class="label {% if narrow %}label--small lg:label--base{% else %}label--base lg:label--large{% endif %}">Date</span></th>
@@ -87,10 +88,10 @@ No pollen to report
   <tbody id="pollen-tbody">
     {% for row in features offset: 1 %}
     <tr>
-      <td><span class="label {% if narrow %}label--small lg:label--base{% else %}label--small lg:label--base{% endif %}">{{ row.properties.ReportDateTime | divided_by: 1000 | date: '%-m/%-d/%Y' }}</span></td>
-      <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true">{{ row.properties.PollenCount }}</span></td>
+      <td><span class="label {% if narrow %}label--small lg:label--base{% else %}label--small lg:label--base{% endif %}">{{ row.properties.ReportDateTime | divided_by: 1000 | date: '%B %-d' }}</span></td>
+      <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true" data-value-locale="{{ trmnl.user.locale }}">{{ row.properties.PollenCount }}</span></td>
       <td><span class="label {% if narrow %}label--small lg:label--base{% else %}label--small lg:label--base{% endif %}">{% render 'format_pollen_label', properties: row.properties %}</span></td>
-      <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true">{{ row.properties.AQI }}</span></td>
+      <td class="text--center"><span class="value value--xxsmall lg:value--xsmall value--tnums" data-value-format="true" data-value-locale="{{ trmnl.user.locale }}">{{ row.properties.AQI }}</span></td>
       <td><span class="label {% if narrow %}label--small lg:label--base{% else %}label--small lg:label--base{% endif %}">{{ row.properties.Category }}</span></td>
       {% unless narrow %}
       <td><span class="label label--small lg:label--base">{{ row.properties.ResponsiblePollutant }}</span></td>

@@ -2,18 +2,18 @@
 {% assign pollen_count = today.PollenCount | plus: 0 %}
 {% assign aqi_value = today.AQI | plus: 0 %}
 
-<div class="layout layout--col gap--space-between">
+<div class="layout layout--col layout--top">
   <div class="grid grid--cols-2 w--full mb--5">
     {% render 'glance_card_pollen', pollen_count: pollen_count, today: today, large_label: true %}
     {% render 'glance_card_aqi', aqi_value: aqi_value, today: today, large_label: true %}
   </div>
-  <div class="w--full">
+  <div class="w--full stretch">
     {% render 'historical_table', features: features, narrow: false %}
   </div>
 </div>
 
 <div class="title_bar">
   <img class="image image-stroke image-stroke--medium" src="https://raw.githubusercontent.com/stephenyeargin/trmnl-nashville-pollen-aqi/refs/heads/main/assets/mnhd.png" width="28" height="28">
-  <span class="title">Report for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%-m/%-d/%Y' }}</span>
+  <span class="title">Report for {{ features.first.properties.ReportDateTime |  divided_by: 1000 | date: '%B %-d' }}</span>
   <span class="instance">{{ trmnl.plugin_settings.instance_name  }}</span>
 </div>
