@@ -20,5 +20,5 @@ custom_fields:
   learn_more_url: https://www.nashville.gov/departments/health/environmental-health/air-pollution-control/daily-aqi-and-pollen-count
   email_address: stephen@yearg.in
 name: Nashville Pollen & Air Quality
-description: Local pollen count and air quality forecast for Nashville
+description: Local allergy & smog forecast
 refresh_interval: 1440
